@@ -254,7 +254,7 @@ function eventListener() {
 
 function main() {
 	// 比赛
-	toastLog("开始比赛");
+toastLog("begin")
 	click(profile.compete.x, profile.compete.y);
 	sleep(1000);
 	click(profile.compete.x, profile.compete.y);
@@ -264,8 +264,8 @@ function main() {
 	toastLog("选车");
 	sleep(700);
 	chooseCar();
-	sleep(2000);
-	click(profile.goldenPoint.x, profile.goldenPoint.y);
+	sleep(3000);
+//	click(profile.goldenPoint.x, profile.goldenPoint.y);
 	click(profile.goldenPoint.x, profile.goldenPoint.y);
 
 	// 载入动画
@@ -315,13 +315,11 @@ function afterRun() {
 		counter_next++;
 	}
 	sleep(3000)
-
-	var img = captureScreen();
+var img = captureScreen();
 	var goldenPoint = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
 	if(!colors.equals(goldenPoint, "#c3fb12")){
-		sleep(2000)
+    sleep(2000)
 		toastLog("获得奖励")
-		toastLog("点击继续");
 		click(profile.goldenPoint.x + 150, profile.goldenPoint.y);
 		sleep(2000)
 	}
@@ -368,6 +366,14 @@ function afterRun() {
 function chooseCar() {
 	var flag = true;
 	sleep(2000);
+
+	var aaa = captureScreen();
+	var check = images.pixel(aaa, profile.goldenPoint.x, profile.goldenPoint.y);
+	if(colors.equals(check, "#ffc3fb12") || colors.equals(check, "#ffffffff")){
+		toastLog("状态异常，回退")
+		back()
+		sleep(2000)
+	}
 
 	while (flag) {
 		for (let i = 0; i < cars.length; i++) {
