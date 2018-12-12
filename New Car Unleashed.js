@@ -307,7 +307,7 @@ function run() {
 function raceDone(startTime, loop) {
   // 3秒采样一次
   var now = new Date().getTime();
-  if (now > startTime + 3000*loop) {
+  if (loop%3 == 0) {
     var img = captureScreen();
     var goldenPoint = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
     if (colors.equals(goldenPoint, "#c3fb12")) {
