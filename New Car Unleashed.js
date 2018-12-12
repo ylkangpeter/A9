@@ -293,19 +293,21 @@ toastLog("begin")
 function run() {
   var startTime = new Date().getTime()
   // 定时点击氮气
-  while (!raceDone(startTime)) {
+  var loop = 0;
+  while (!raceDone(startTime, loop)) {
     click(height * 4 / 5, width / 2);
     swipe(5 * height / 8, width / 2, height * 7 / 8, width / 2, 300);
     var now = new Date().getTime();
     sleep(1000)
+    loop++;
   }
   toastLog("用时：" + (new Date().getTime() - startTime) / 1000)
 }
 
-function raceDone(startTime) {
+function raceDone(startTime, loop) {
   // 3秒采样一次
   var now = new Date().getTime();
-  if (now > startTime + 3000) {
+  if (now > startTime + 3000*loop) {
     var img = captureScreen();
     var goldenPoint = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
     if (colors.equals(goldenPoint, "#c3fb12")) {
