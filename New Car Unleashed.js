@@ -80,6 +80,12 @@ var profile1920 = {
     y: 293
   },
 
+  //活动首页取特征点
+  leftUp: {
+    x: 50,
+    y: 100
+  },
+
   //左边按钮
   left: {
     x: 840,
@@ -104,6 +110,12 @@ var profile2160 = {
     y: 1000
   },
 
+  //活动首页取特征点
+  leftUp: {
+    x: 50,
+    y: 100
+  },
+  
   goldenPoint: {
     x: 1700,
     y: 1000
@@ -170,7 +182,7 @@ var profile2340 = {
     x: 1863,
     y: 961
   },
-  upgrade:{
+  upgrade: {
     x: 540,
     y: 1000
   },
@@ -266,22 +278,30 @@ function eventListener() {
 
 function main() {
   // 比赛
-toastLog("begin")
+  toastLog("begin")
   sleep(1000);
   click(profile.compete.x, profile.compete.y);
   sleep(2000);
+  while (true) {
+    try {
+      doIt()
+    } catch (err) {
+      toastLog(err)
+    }
+    return
+  }
+}
 
+function doIt() {
   // 选车 & 开始比赛
   toastLog("选车");
   sleep(700);
-  chooseCar();
-  sleep(3000);
-//  click(profile.goldenPoint.x, profile.goldenPoint.y);
-  click(profile.goldenPoint.x, profile.goldenPoint.y);
 
+  chooseCar();
+  sleep(4000);
+  click(profile.goldenPoint.x, profile.goldenPoint.y);
   // 载入动画
   sleep(10000);
-
   // 开跑
   run()
 
@@ -307,12 +327,19 @@ function run() {
 function raceDone(startTime, loop) {
   // 3秒采样一次
   var now = new Date().getTime();
-  if (loop%3 == 0) {
+  if (loop % 3 == 0) {
     var img = captureScreen();
     var goldenPoint = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
     if (colors.equals(goldenPoint, "#c3fb12")) {
       toastLog("比赛结束")
       return true;
+    }
+
+    img = captureScreen();
+    var leftUp = images.pixel(img, profile.leftUp.x, profile.leftUp.y);
+    if (colors.equals(leftUp, "#ffffffff")) {
+      toastLog("something went wrong")
+      throw "something went wrong"
     }
   }
   return false;
@@ -328,9 +355,9 @@ function afterRun() {
     counter_next++;
   }
   sleep(3000)
-var img = captureScreen();
+  var img = captureScreen();
   var goldenPoint = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
-  if(!colors.equals(goldenPoint, "#c3fb12")){
+  if (!colors.equals(goldenPoint, "#c3fb12")) {
     sleep(2000)
     toastLog("获得奖励")
     click(profile.goldenPoint.x + 150, profile.goldenPoint.y);
@@ -383,7 +410,7 @@ function chooseCar() {
   var aaa = captureScreen();
   var check = images.pixel(aaa, profile.goldenPoint.x, profile.goldenPoint.y);
   var upgrade = images.pixel(aaa, profile.upgrade.x, profile.upgrade.y);
-  if((colors.equals(check, "#ffc3fb12") || colors.equals(check, "#ffffffff")) && colors.equals(upgrade, "#ffffffff")){
+  if ((colors.equals(check, "#ffc3fb12") || colors.equals(check, "#ffffffff")) && colors.equals(upgrade, "#ffffffff")) {
     toastLog("状态异常，回退")
     back()
     sleep(2000)
@@ -403,7 +430,7 @@ function chooseCar() {
       // if (colors.equals(carStatus, "#ffc3fb12")) {
 
       click(carPoint.x - profile.distance.x / 2, carPoint.y - profile.distance.y / 2);
-      sleep(2000);
+      sleep(4000);
       // 
       var img = captureScreen();
       var start = images.pixel(img, profile.goldenPoint.x, profile.goldenPoint.y);
